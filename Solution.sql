@@ -17,6 +17,8 @@ SELECT * FROM printer WHERE color = 'y';
 Задание № 5:
 /* Найдите номер модели, скорость и размер жесткого диска ПК, имеющих 12x или 24x CD и цену менее 600 дол. */
 SELECT model, speed, hd FROM pc WHERE (cd = '12x' OR cd = '24x') AND price < 600;
+/*или */ 
+SELECT model, speed, hd FROM pc WHERE cd IN ('12x', '24x') and price < 600;
 
 Задание № 6:
 /* Для каждого производителя, выпускающего ПК-блокноты c объёмом жесткого диска не менее 10 Гбайт, 
@@ -34,21 +36,18 @@ SELECT prt.model, prt.price FROM printer prt INNER JOIN Product p ON prt.model =
 Задание № 8:
 /* Найдите производителя, выпускающего ПК, но не ПК-блокноты. */
 SELECT DISTINCT maker FROM product WHERE type = 'pc' AND maker NOT IN(SELECT maker FROM product WHERE type = 'laptop');
-
-/* Или через EXCEPT */
-SELECT maker FROM Product WHERE type = 'pc'
+/* или */
+SELECT maker FROM product WHERE type = 'pc'
 EXCEPT
-SELECT maker FROM Product WHERE type = 'laptop';
+SELECT maker FROM product WHERE type = 'laptop';
 
 Задание № 9:
 /* Найдите производителей ПК с процессором не менее 450 Мгц. Вывести: Maker. */
 SELECT DISTINCT maker FROM product p INNER JOIN pc ON p.model = pc.model WHERE speed >= 450;
 
-
 Задание № 10:
 /* Найдите модели принтеров, имеющих самую высокую цену. Вывести: model, price. */
 SELECT model, price FROM printer WHERE price = (SELECT MAX(price) FROM printer);
-
 
 Задание № 11:
 /* Найдите среднюю скорость ПК. */
@@ -94,13 +93,50 @@ SELECT maker, avg(screen) FROM product p JOIN laptop l ON p.model = l.model GROU
 
 Задание № 20:
 /* Найдите производителей, выпускающих по меньшей мере три различных модели ПК. Вывести: Maker, число моделей ПК. */
-SELECT DISTINCT maker, count(model) FROM product WHERE type = 'pc' GROUP BY maker HAVING count(model) >= 3;
+SELECT maker, count(model) FROM product WHERE type = 'pc' GROUP BY maker HAVING count(model) >= 3;
+
+Задание № 23:
+/* Найдите производителей, которые производили бы как ПК со скоростью не менее 750 МГц, 
+так и ПК-блокноты со скоростью не менее 750 МГц. Вывести: Maker */
+SELECT DISTINCT maker FROM product p JOIN pc ON p.model = pc.model AND speed >= 750 
+AND maker IN (SELECT maker FROM product p JOIN laptop l ON p.model = l.model AND speed >=750);
+/* или */ 
+SELECT maker FROM product p INNER JOIN pc ON p.model = pc.model WHERE speed > = 750
+INTERSECT
+SELECT maker FROM product p INNER JOIN laptop l ON p.model = l.model WHERE speed > = 750;
+
+Задание № 38:
+/* Найдите страны, имевшие когда-либо классы обычных боевых кораблей ('bb') и имевшие когда-либо классы крейсеров ('bc'). */
+SELECT country FROM classes WHERE type = 'bb' AND country IN (SELECT country FROM classes WHERE type ='bc');
+/* или*/
+SELECT country FROM classes WHERE type = 'bb'
+INTERSECT
+SELECT country FROM classes WHERE type = 'bc';
+
+Задание № 42:
+/* Найдите названия кораблей, потопленных в сражениях, и название сражения, в котором они были потоплены. */
+SELECT ship, battle FROM outcomes WHERE result = 'sunk';
+
+Задание № 44:
+/* Найдите названия всех кораблей в базе данных, начинающихся с буквы R. */
+SELECT name FROM Ships WHERE name LIKE 'r%'
+UNION
+SELECT ship FROM Outcomes WHERE ship LIKE 'r%';
 
 Задание №:
 /* */
 
+Задание №:
+/* */
 
+Задание №:
+/* */
 
+Задание №:
+/* */
+
+Задание №:
+/* */
 
 
 
